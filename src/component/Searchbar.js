@@ -1,4 +1,7 @@
 import React, {Component} from 'react';
+
+
+
 import '../search.css';
 
 
@@ -8,7 +11,7 @@ class Searchbar extends Component {
         this.state={
             error: null,
             isLoaded: false,
-           searchData:[]
+           searchData:null
 
         };
     }
@@ -28,11 +31,15 @@ class Searchbar extends Component {
                 .then(res => res.json())
                 .then(
                     (res) => {
-                        this.setState({
-                            isLoaded: true,
-                            searchData: res.drinks
+                        console.log(res)
+                        if (res) {
+                            this.setState({
+                                isLoaded: true,
+                                searchData: res.drinks
 
-                        });
+                            });
+                        }
+
                     },
                     // error handler
                     (error) => {
@@ -55,10 +62,32 @@ class Searchbar extends Component {
                 <input type="text" onChange={(event => this.search(event.target.value))}/>
                 <div className="col">
 
+                        {(() => {
+                            if (searchData) {
+                                return (
+                                    <div>
+                                        <table border="1" align='center' width='40%'>
+                                            <tr>
+                                                <th>Drink ID</th>
+                                                <th>Name</th>
+                                                <th>Image</th>
 
-                    {searchData.map(drinks => <div>{drinks.strDrink}</div>)}
+                                            </tr>
+                                            <tr>
+                                                <td>{searchData.map(drinks => <div>{drinks.idDrink}</div>)}</td>
+                                                <td>{searchData.map(drinks => <div>{drinks.strDrink}</div>)}</td>
+                                                <td>{searchData.map(drinks => <div><img height='10' width='10' src={drinks.strDrinkThumb}/></div>)}</td>
 
-                </div>
+                                            </tr>
+                                        </table>
+
+                                    </div>
+
+                                )
+
+                            }
+                        })()}
+                    </div>
             </div>
 
 
